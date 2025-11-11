@@ -1,0 +1,178 @@
+/**
+ * KeyCDN WebP Optimizer - Admin Styles
+ */
+
+.keycdn-webp-prerequisites {
+	background: #f0f8ff;
+	border: 1px solid #b3d9ff;
+	border-radius: 4px;
+	padding: 20px;
+	margin: 20px 0;
+	position: relative;
+}
+
+.keycdn-webp-prerequisites::before {
+	content: "ℹ️";
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	font-size: 20px;
+}
+
+.prerequisites-info h3 {
+	margin-top: 0;
+	color: #0073aa;
+	font-size: 16px;
+}
+
+.prerequisite-item {
+	margin: 15px 0;
+}
+
+.prerequisite-item h4 {
+	margin: 0 0 8px 0;
+	color: #23282d;
+	font-size: 14px;
+}
+
+.prerequisite-item ul {
+	margin: 5px 0 0 20px;
+}
+
+.prerequisite-item li {
+	margin: 5px 0;
+	color: #555;
+}
+
+.how-it-works {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #b3d9ff;
+}
+
+.how-it-works h4 {
+	margin: 0 0 8px 0;
+	color: #0073aa;
+	font-size: 14px;
+}
+
+.how-it-works ul {
+	margin: 5px 0 0 20px;
+}
+
+.how-it-works li {
+	margin: 5px 0;
+	color: #555;
+}
+
+.keycdn-webp-status {
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 15px;
+	margin: 20px 0;
+}
+
+.keycdn-webp-status .form-table {
+	margin: 0;
+}
+
+.keycdn-webp-status .form-table th {
+	width: 150px;
+	padding: 8px 10px 8px 0;
+	font-weight: 600;
+	color: #23282d;
+}
+
+.keycdn-webp-status .form-table td {
+	padding: 8px 10px;
+}
+
+.status-indicator {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.status-indicator.enabled {
+	background: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.status-indicator.disabled {
+	background: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+}
+
+/* Form styling improvements */
+.form-table th {
+	font-weight: 600;
+}
+
+.form-table td p.description {
+	font-style: italic;
+	color: #666;
+	margin: 5px 0 0 0;
+}
+
+/* Responsive design */
+@media (max-width: 782px) {
+	.keycdn-webp-prerequisites {
+		padding: 15px;
+		margin: 15px 0;
+	}
+
+	.keycdn-webp-prerequisites::before {
+		position: static;
+		display: block;
+		margin-bottom: 10px;
+	}
+
+	.keycdn-webp-status .form-table th,
+	.keycdn-webp-status .form-table td {
+		display: block;
+		width: 100%;
+		padding: 5px 0;
+	}
+
+	.keycdn-webp-status .form-table th {
+		font-weight: 600;
+		border-bottom: 1px solid #eee;
+		margin-bottom: 5px;
+	}
+}
+
+/* Settings page specific styling */
+.settings_page_keycdn-webp-settings .form-table th {
+	width: 200px;
+}
+
+.settings_page_keycdn-webp-settings .form-table td {
+	padding: 15px 10px;
+}
+
+.settings_page_keycdn-webp-settings .form-table td input[type="checkbox"] {
+	margin-right: 8px;
+}
+
+.settings_page_keycdn-webp-settings .form-table td input[type="number"] {
+	width: 80px;
+}
+
+/* Success/error notices */
+.notice.keycdn-webp-notice {
+	border-left-color: #0073aa;
+}
+
+.notice.keycdn-webp-notice.notice-success {
+	border-left-color: #46b450;
+}
+
+.notice.keycdn-webp-notice.notice-error {
+	border-left-color: #dc3232;
+}

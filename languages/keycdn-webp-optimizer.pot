@@ -1,0 +1,214 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: KeyCDN WebP Image Optimization 1.0.0\n"
+"Report-Msgid-Bugs-To: https://tomtom.design\n"
+"POT-Creation-Date: 2025-10-24 01:07+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: keycdn-webp-optimizer\n"
+
+#: includes/class-webp-admin.php:242
+msgid "1. WP Offload Media Plugin"
+msgstr ""
+
+#: includes/class-webp-admin.php:250
+msgid "2. KeyCDN Configuration"
+msgstr ""
+
+#: includes/class-webp-admin.php:262
+msgid "Adds WebP source with ?format=webp&quality=X parameter"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Automatically converts WordPress images to WebP format using picture "
+"elements. Works with WP Offload Media and KeyCDN for on-the-fly WebP "
+"conversion."
+msgstr ""
+
+#: includes/class-webp-admin.php:302
+msgid "Basic"
+msgstr ""
+
+#: includes/class-webp-admin.php:263
+msgid "Browser automatically serves WebP to supported browsers"
+msgstr ""
+
+#: includes/class-webp-admin.php:133
+msgid "Configuration"
+msgstr ""
+
+#: includes/class-webp-admin.php:86
+msgid "Configure Settings"
+msgstr ""
+
+#: includes/class-webp-admin.php:276
+msgid "Configure the WebP conversion settings below."
+msgstr ""
+
+#: includes/class-webp-admin.php:292
+msgid "Current Status"
+msgstr ""
+
+#: includes/class-webp-admin.php:164 includes/class-webp-admin.php:306
+msgid "Debug Mode"
+msgstr ""
+
+#: includes/class-webp-admin.php:360
+msgid ""
+"Debug mode adds HTML comments showing which images were converted. Useful "
+"for troubleshooting."
+msgstr ""
+
+#: includes/class-webp-admin.php:295 includes/class-webp-admin.php:308
+msgid "Disabled"
+msgstr ""
+
+#: includes/class-webp-admin.php:253
+msgid "Enable ?format=webp parameter support in your CDN settings"
+msgstr ""
+
+#: includes/class-webp-admin.php:358
+msgid "Enable debug mode (shows conversion info in HTML comments)"
+msgstr ""
+
+#: includes/class-webp-admin.php:344
+msgid "Enable enhanced mode (handles srcset attributes)"
+msgstr ""
+
+#: includes/class-webp-admin.php:148
+msgid "Enable WebP Conversion"
+msgstr ""
+
+#: includes/class-webp-admin.php:330
+msgid "Enable WebP conversion for WordPress images"
+msgstr ""
+
+#: includes/class-webp-admin.php:295 includes/class-webp-admin.php:308
+msgid "Enabled"
+msgstr ""
+
+#: includes/class-webp-admin.php:302
+msgid "Enhanced (handles srcset)"
+msgstr ""
+
+#: includes/class-webp-admin.php:156
+msgid "Enhanced Mode"
+msgstr ""
+
+#: includes/class-webp-admin.php:346
+msgid ""
+"Enhanced mode processes responsive images with srcset attributes for "
+"complete WebP coverage."
+msgstr ""
+
+#: includes/class-webp-admin.php:264
+msgid "Falls back to original format for older browsers"
+msgstr ""
+
+#: includes/class-webp-admin.php:84
+msgid "has been activated!"
+msgstr ""
+
+#: includes/class-webp-admin.php:259
+msgid "How it works:"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/your-username/keycdn-webp-optimizer"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://tomtom.design"
+msgstr ""
+
+#: includes/class-webp-admin.php:245
+msgid ""
+"Images should be offloaded to Digital Ocean Spaces or similar S3-compatible "
+"storage"
+msgstr ""
+
+#: includes/class-webp-admin.php:58
+msgid "KeyCDN WebP"
+msgstr ""
+
+#. Name of the plugin
+#: includes/class-webp-admin.php:83
+msgid "KeyCDN WebP Image Optimization"
+msgstr ""
+
+#: includes/class-webp-admin.php:57
+msgid "KeyCDN WebP Settings"
+msgstr ""
+
+#: includes/class-webp-admin.php:300
+msgid "Mode"
+msgstr ""
+
+#: includes/class-webp-admin.php:244
+msgid "Must be installed and configured"
+msgstr ""
+
+#: includes/class-webp-admin.php:126
+msgid "Prerequisites"
+msgstr ""
+
+#: includes/class-webp-admin.php:239
+msgid "Prerequisites for WebP Optimization"
+msgstr ""
+
+#: includes/class-webp-admin.php:312
+msgid "Quality Setting"
+msgstr ""
+
+#: includes/class-webp-admin.php:69
+msgid "Settings"
+msgstr ""
+
+#: includes/class-webp-admin.php:140
+msgid "Status"
+msgstr ""
+
+#: includes/class-webp-admin.php:254
+msgid "The CDN should convert images to WebP on-the-fly"
+msgstr ""
+
+#: includes/class-webp-admin.php:261
+msgid "The plugin converts &lt;img&gt; tags to &lt;picture&gt; elements"
+msgstr ""
+
+#. Author of the plugin
+msgid "tom & tom"
+msgstr ""
+
+#: includes/class-webp-admin.php:172
+msgid "WebP Quality"
+msgstr ""
+
+#: includes/class-webp-admin.php:371
+msgid ""
+"WebP quality setting (1-100). Higher values mean better quality but larger "
+"file sizes."
+msgstr ""
+
+#: includes/class-webp-admin.php:332
+msgid ""
+"When enabled, the plugin will automatically convert img tags to picture "
+"elements with WebP support."
+msgstr ""
+
+#: includes/class-webp-admin.php:252
+msgid "Your CDN must support format conversion via URL parameters"
+msgstr ""

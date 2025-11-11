@@ -1,0 +1,194 @@
+# French translation for KeyCDN WebP Image Optimization
+# Copyright (C) 2024 tom & tom
+# This file is distributed under the same license as the KeyCDN WebP Image Optimization package.
+msgid ""
+msgstr ""
+"Project-Id-Version: KeyCDN WebP Image Optimization 1.0.0\n"
+"Report-Msgid-Bugs-To: https://tomtom.design\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: tom & tom <bonjour@tomtom.design>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0\n"
+"X-Domain: keycdn-webp-optimizer\n"
+
+#: keycdn-webp-optimizer.php:25
+msgid "KeyCDN WebP Settings"
+msgstr "Paramètres KeyCDN WebP"
+
+#: includes/class-webp-admin.php:62
+msgid "Settings"
+msgstr "Paramètres"
+
+#: includes/class-webp-admin.php:75
+msgid "Prerequisites"
+msgstr "Prérequis"
+
+#: includes/class-webp-admin.php:76
+msgid "Configuration"
+msgstr "Configuration"
+
+#: includes/class-webp-admin.php:77
+msgid "Status"
+msgstr "Statut"
+
+#: includes/class-webp-admin.php:78
+msgid "Enable WebP Conversion"
+msgstr "Activer la conversion WebP"
+
+#: includes/class-webp-admin.php:79
+msgid "Enhanced Mode"
+msgstr "Mode amélioré"
+
+#: includes/class-webp-admin.php:81
+msgid "WebP Quality"
+msgstr "Qualité WebP"
+
+#: includes/class-webp-admin.php:82
+msgid "Prerequisites for WebP Optimization"
+msgstr "Prérequis pour l'optimisation WebP"
+
+#: includes/class-webp-admin.php:83
+msgid "1. WP Offload Media Plugin"
+msgstr "1. Plugin WP Offload Media"
+
+#: includes/class-webp-admin.php:84
+msgid "Must be installed and configured"
+msgstr "Doit être installé et configuré"
+
+#: includes/class-webp-admin.php:85
+msgid "Images should be offloaded to Digital Ocean Spaces or similar S3-compatible storage"
+msgstr "Les images doivent être externalisées vers Digital Ocean Spaces ou un stockage S3 compatible similaire"
+
+#: includes/class-webp-admin.php:86
+msgid "2. KeyCDN Configuration"
+msgstr "2. Configuration KeyCDN"
+
+#: includes/class-webp-admin.php:87
+msgid "Your CDN must support format conversion via URL parameters"
+msgstr "Votre CDN doit supporter la conversion de format via les paramètres d'URL"
+
+#: includes/class-webp-admin.php:88
+msgid "Enable ?format=webp parameter support in your CDN settings"
+msgstr "Activez le support du paramètre ?format=webp dans les paramètres de votre CDN"
+
+#: includes/class-webp-admin.php:89
+msgid "The CDN should convert images to WebP on-the-fly"
+msgstr "Le CDN doit convertir les images en WebP à la volée"
+
+#: includes/class-webp-admin.php:90
+msgid "How it works:"
+msgstr "Comment ça fonctionne :"
+
+#: includes/class-webp-admin.php:91
+msgid "The plugin converts <img> tags to <picture> elements"
+msgstr "Le plugin convertit les balises <img> en éléments <picture>"
+
+#: includes/class-webp-admin.php:92
+msgid "Adds WebP source with ?format=webp&quality=X parameter"
+msgstr "Ajoute une source WebP avec le paramètre ?format=webp&quality=X"
+
+#: includes/class-webp-admin.php:93
+msgid "Browser automatically serves WebP to supported browsers"
+msgstr "Le navigateur sert automatiquement WebP aux navigateurs compatibles"
+
+#: includes/class-webp-admin.php:94
+msgid "Falls back to original format for older browsers"
+msgstr "Revient au format original pour les navigateurs plus anciens"
+
+#: includes/class-webp-admin.php:95
+msgid "Configure the WebP conversion settings below."
+msgstr "Configurez les paramètres de conversion WebP ci-dessous."
+
+#: includes/class-webp-admin.php:96
+msgid "Current Status"
+msgstr "Statut actuel"
+
+#: includes/class-webp-admin.php:97
+msgid "Enabled"
+msgstr "Activé"
+
+#: includes/class-webp-admin.php:98
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: includes/class-webp-admin.php:99
+msgid "Mode"
+msgstr "Mode"
+
+#: includes/class-webp-admin.php:100
+msgid "Enhanced (handles srcset)"
+msgstr "Amélioré (gère srcset)"
+
+#: includes/class-webp-admin.php:101
+msgid "Basic"
+msgstr "Basique"
+
+#: includes/class-webp-admin.php:102
+msgid "Debug Mode"
+msgstr "Mode débogage"
+
+#: includes/class-webp-admin.php:103
+msgid "Quality Setting"
+msgstr "Paramètre de qualité"
+
+#: includes/class-webp-admin.php:104
+msgid "Enable WebP conversion for WordPress images"
+msgstr "Activer la conversion WebP pour les images WordPress"
+
+#: includes/class-webp-admin.php:105
+msgid "When enabled, the plugin will automatically convert img tags to picture elements with WebP support."
+msgstr "Quand activé, le plugin convertira automatiquement les balises img en éléments picture avec support WebP."
+
+#: includes/class-webp-admin.php:106
+msgid "Enable enhanced mode (handles srcset attributes)"
+msgstr "Activer le mode amélioré (gère les attributs srcset)"
+
+#: includes/class-webp-admin.php:107
+msgid "Enhanced mode processes responsive images with srcset attributes for complete WebP coverage."
+msgstr "Le mode amélioré traite les images responsives avec des attributs srcset pour une couverture WebP complète."
+
+#: includes/class-webp-admin.php:108
+msgid "Enable debug mode (shows conversion info in HTML comments)"
+msgstr "Activer le mode débogage (affiche les informations de conversion dans les commentaires HTML)"
+
+#: includes/class-webp-admin.php:109
+msgid "Debug mode adds HTML comments showing which images were converted. Useful for troubleshooting."
+msgstr "Le mode débogage ajoute des commentaires HTML montrant quelles images ont été converties. Utile pour le dépannage."
+
+#: includes/class-webp-admin.php:110
+msgid "WebP quality setting (1-100). Higher values mean better quality but larger file sizes."
+msgstr "Paramètre de qualité WebP (1-100). Des valeurs plus élevées signifient une meilleure qualité mais des fichiers plus volumineux."
+
+#: includes/class-webp-converter.php:45
+msgid "KeyCDN WebP Image Optimization:"
+msgstr "Optimisation d'images KeyCDN WebP :"
+
+#: includes/class-webp-converter.php:46
+msgid "Works with WP Offload Media"
+msgstr "Fonctionne avec WP Offload Media"
+
+#: includes/class-webp-admin.php:84
+msgid "has been activated!"
+msgstr "a été activé !"
+
+#: includes/class-webp-admin.php:86
+msgid "Configure Settings"
+msgstr "Configurer les paramètres"
+
+#: keycdn-webp-optimizer.php:97
+msgid "KeyCDN WebP Test"
+msgstr "Test KeyCDN WebP"
+
+#: assets/js/admin.js:53
+msgid "Please enter a valid quality value between 1 and 100."
+msgstr "Veuillez entrer une valeur de qualité valide entre 1 et 100."
+
+#: assets/js/admin.js:38
+msgid "Debug mode will add HTML comments to your pages. This should only be enabled for troubleshooting. Continue?"
+msgstr "Le mode débogage ajoutera des commentaires HTML à vos pages. Ceci ne devrait être activé que pour le dépannage. Continuer ?"
