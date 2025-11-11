@@ -61,7 +61,7 @@ class KeyCDN_WebP_Admin {
      * Add Settings link to plugins page
      */
     public function add_plugin_action_links($links) {
-        $settings_link = '<a href="' . admin_url('options-general.php?page=keycdn-webp-settings') . '">' . __('Settings', 'keycdn-webp-optimizer') . '</a>';
+        $settings_link = '<a href="' . esc_url(admin_url('options-general.php?page=keycdn-webp-settings')) . '">' . esc_html__('Settings', 'keycdn-webp-optimizer') . '</a>';
         array_unshift($links, $settings_link);
         return $links;
     }
@@ -75,10 +75,10 @@ class KeyCDN_WebP_Admin {
             ?>
             <div class="notice notice-success is-dismissible">
                 <p>
-                    <strong><?php _e('KeyCDN WebP Image Optimization', 'keycdn-webp-optimizer'); ?></strong> 
-                    <?php _e('has been activated!', 'keycdn-webp-optimizer'); ?>
-                    <a href="<?php echo admin_url('options-general.php?page=keycdn-webp-settings'); ?>" class="button button-primary" style="margin-left: 10px;">
-                        <?php _e('Configure Settings', 'keycdn-webp-optimizer'); ?>
+                    <strong><?php esc_html_e('KeyCDN WebP Image Optimization', 'keycdn-webp-optimizer'); ?></strong> 
+                    <?php esc_html_e('has been activated!', 'keycdn-webp-optimizer'); ?>
+                    <a href="<?php echo esc_url(admin_url('options-general.php?page=keycdn-webp-settings')); ?>" class="button button-primary" style="margin-left: 10px;">
+                        <?php esc_html_e('Configure Settings', 'keycdn-webp-optimizer'); ?>
                     </a>
                 </p>
             </div>
@@ -241,32 +241,32 @@ class KeyCDN_WebP_Admin {
         ?>
         <div class="keycdn-webp-prerequisites">
             <div class="prerequisites-info">
-                <h3><?php _e('Prerequisites for WebP Optimization', 'keycdn-webp-optimizer'); ?></h3>
+                <h3><?php esc_html_e('Prerequisites for WebP Optimization', 'keycdn-webp-optimizer'); ?></h3>
                 
                 <div class="prerequisite-item">
-                    <h4><?php _e('1. WP Offload Media Plugin', 'keycdn-webp-optimizer'); ?></h4>
+                    <h4><?php esc_html_e('1. WP Offload Media Plugin', 'keycdn-webp-optimizer'); ?></h4>
                     <ul>
-                        <li><?php _e('Must be installed and configured', 'keycdn-webp-optimizer'); ?></li>
-                        <li><?php _e('Images should be offloaded to Digital Ocean Spaces or similar S3-compatible storage', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Must be installed and configured', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Images should be offloaded to Digital Ocean Spaces or similar S3-compatible storage', 'keycdn-webp-optimizer'); ?></li>
                     </ul>
                 </div>
                 
                 <div class="prerequisite-item">
-                    <h4><?php _e('2. KeyCDN Configuration', 'keycdn-webp-optimizer'); ?></h4>
+                    <h4><?php esc_html_e('2. KeyCDN Configuration', 'keycdn-webp-optimizer'); ?></h4>
                     <ul>
-                        <li><?php _e('Your CDN must support format conversion via URL parameters', 'keycdn-webp-optimizer'); ?></li>
-                        <li><?php _e('Enable ?format=webp parameter support in your CDN settings', 'keycdn-webp-optimizer'); ?></li>
-                        <li><?php _e('The CDN should convert images to WebP on-the-fly', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Your CDN must support format conversion via URL parameters', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Enable ?format=webp parameter support in your CDN settings', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('The CDN should convert images to WebP on-the-fly', 'keycdn-webp-optimizer'); ?></li>
                     </ul>
                 </div>
                 
                 <div class="how-it-works">
-                    <h4><?php _e('How it works:', 'keycdn-webp-optimizer'); ?></h4>
+                    <h4><?php esc_html_e('How it works:', 'keycdn-webp-optimizer'); ?></h4>
                     <ul>
-                        <li><?php _e('The plugin converts &lt;img&gt; tags to &lt;picture&gt; elements', 'keycdn-webp-optimizer'); ?></li>
-                        <li><?php _e('Adds WebP source with ?format=webp&quality=X parameter', 'keycdn-webp-optimizer'); ?></li>
-                        <li><?php _e('Browser automatically serves WebP to supported browsers', 'keycdn-webp-optimizer'); ?></li>
-                        <li><?php _e('Falls back to original format for older browsers', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('The plugin converts &lt;img&gt; tags to &lt;picture&gt; elements', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Adds WebP source with ?format=webp&quality=X parameter', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Browser automatically serves WebP to supported browsers', 'keycdn-webp-optimizer'); ?></li>
+                        <li><?php esc_html_e('Falls back to original format for older browsers', 'keycdn-webp-optimizer'); ?></li>
                     </ul>
                 </div>
             </div>
@@ -278,7 +278,7 @@ class KeyCDN_WebP_Admin {
      * Configuration section callback
      */
     public function configuration_section_callback() {
-        echo '<p>' . __('Configure the WebP conversion settings below.', 'keycdn-webp-optimizer') . '</p>';
+        echo '<p>' . esc_html__('Configure the WebP conversion settings below.', 'keycdn-webp-optimizer') . '</p>';
     }
     
     /**
@@ -294,29 +294,29 @@ class KeyCDN_WebP_Admin {
         <div class="keycdn-webp-status">
             <table class="form-table">
                 <tr>
-                    <th scope="row"><?php _e('Current Status', 'keycdn-webp-optimizer'); ?></th>
+                    <th scope="row"><?php esc_html_e('Current Status', 'keycdn-webp-optimizer'); ?></th>
                     <td>
-                        <span class="status-indicator <?php echo $enabled ? 'enabled' : 'disabled'; ?>">
-                            <?php echo $enabled ? __('Enabled', 'keycdn-webp-optimizer') : __('Disabled', 'keycdn-webp-optimizer'); ?>
+                        <span class="status-indicator <?php echo esc_attr($enabled ? 'enabled' : 'disabled'); ?>">
+                            <?php echo esc_html($enabled ? __('Enabled', 'keycdn-webp-optimizer') : __('Disabled', 'keycdn-webp-optimizer')); ?>
                         </span>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php _e('Mode', 'keycdn-webp-optimizer'); ?></th>
+                    <th scope="row"><?php esc_html_e('Mode', 'keycdn-webp-optimizer'); ?></th>
                     <td>
-                        <?php echo $enhanced ? __('Enhanced (handles srcset)', 'keycdn-webp-optimizer') : __('Basic', 'keycdn-webp-optimizer'); ?>
+                        <?php echo esc_html($enhanced ? __('Enhanced (handles srcset)', 'keycdn-webp-optimizer') : __('Basic', 'keycdn-webp-optimizer')); ?>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php _e('Debug Mode', 'keycdn-webp-optimizer'); ?></th>
+                    <th scope="row"><?php esc_html_e('Debug Mode', 'keycdn-webp-optimizer'); ?></th>
                     <td>
-                        <?php echo $debug ? __('Enabled', 'keycdn-webp-optimizer') : __('Disabled', 'keycdn-webp-optimizer'); ?>
+                        <?php echo esc_html($debug ? __('Enabled', 'keycdn-webp-optimizer') : __('Disabled', 'keycdn-webp-optimizer')); ?>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><?php _e('Quality Setting', 'keycdn-webp-optimizer'); ?></th>
+                    <th scope="row"><?php esc_html_e('Quality Setting', 'keycdn-webp-optimizer'); ?></th>
                     <td>
-                        <?php echo $quality; ?>%
+                        <?php echo esc_html($quality); ?>%
                     </td>
                 </tr>
             </table>
@@ -332,9 +332,9 @@ class KeyCDN_WebP_Admin {
         ?>
         <label>
             <input type="checkbox" name="keycdn_webp_enabled" value="1" <?php checked($enabled, 1); ?> />
-            <?php _e('Enable WebP conversion for WordPress images', 'keycdn-webp-optimizer'); ?>
+            <?php esc_html_e('Enable WebP conversion for WordPress images', 'keycdn-webp-optimizer'); ?>
         </label>
-        <p class="description"><?php _e('When enabled, the plugin will automatically convert img tags to picture elements with WebP support.', 'keycdn-webp-optimizer'); ?></p>
+        <p class="description"><?php esc_html_e('When enabled, the plugin will automatically convert img tags to picture elements with WebP support.', 'keycdn-webp-optimizer'); ?></p>
         <?php
     }
     
@@ -346,9 +346,9 @@ class KeyCDN_WebP_Admin {
         ?>
         <label>
             <input type="checkbox" name="keycdn_webp_enhanced" value="1" <?php checked($enhanced, 1); ?> />
-            <?php _e('Enable enhanced mode (handles srcset attributes)', 'keycdn-webp-optimizer'); ?>
+            <?php esc_html_e('Enable enhanced mode (handles srcset attributes)', 'keycdn-webp-optimizer'); ?>
         </label>
-        <p class="description"><?php _e('Enhanced mode processes responsive images with srcset attributes for complete WebP coverage.', 'keycdn-webp-optimizer'); ?></p>
+        <p class="description"><?php esc_html_e('Enhanced mode processes responsive images with srcset attributes for complete WebP coverage.', 'keycdn-webp-optimizer'); ?></p>
         <?php
     }
     
@@ -360,9 +360,9 @@ class KeyCDN_WebP_Admin {
         ?>
         <label>
             <input type="checkbox" name="keycdn_webp_debug" value="1" <?php checked($debug, 1); ?> />
-            <?php _e('Enable debug mode (shows conversion info in HTML comments)', 'keycdn-webp-optimizer'); ?>
+            <?php esc_html_e('Enable debug mode (shows conversion info in HTML comments)', 'keycdn-webp-optimizer'); ?>
         </label>
-        <p class="description"><?php _e('Debug mode adds HTML comments showing which images were converted. Useful for troubleshooting.', 'keycdn-webp-optimizer'); ?></p>
+        <p class="description"><?php esc_html_e('Debug mode adds HTML comments showing which images were converted. Useful for troubleshooting.', 'keycdn-webp-optimizer'); ?></p>
         <?php
     }
     
@@ -373,7 +373,7 @@ class KeyCDN_WebP_Admin {
         $quality = get_option('keycdn_webp_quality', 80);
         ?>
         <input type="number" id="keycdn_webp_quality" name="keycdn_webp_quality" value="<?php echo esc_attr($quality); ?>" min="1" max="100" class="small-text" />
-        <p class="description"><?php _e('WebP quality setting (1-100). Higher values mean better quality but larger file sizes.', 'keycdn-webp-optimizer'); ?></p>
+        <p class="description"><?php esc_html_e('WebP quality setting (1-100). Higher values mean better quality but larger file sizes.', 'keycdn-webp-optimizer'); ?></p>
         <?php
     }
 }

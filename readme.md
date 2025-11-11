@@ -5,13 +5,13 @@
 | Meta             | Value                                                                 |
 | ---------------- | --------------------------------------------------------------------- |
 | **Contributors** | `gb_simon`                                                            |
-| **Tags**         | webp, optimization, keycdn, cdn, images, performance                  |
+| **Tags**         | webp, optimization, keycdn, cdn, images                               |
 | **Requires**     | WordPress 5.0+ · PHP 7.4+                                             |
 | **Tested up to** | WordPress 6.8                                                         |
-| **Stable tag**   | 1.0.2                                                                 |
+| **Stable tag**   | 1.0.3                                                                 |
 | **License**      | GPLv2 or later ([license](https://www.gnu.org/licenses/gpl-2.0.html)) |
 
-Automatically converts WordPress images to WebP using `<picture>` elements, integrates with WP Offload Media, and leverages KeyCDN for on-the-fly, no-duplicate conversions.
+Automatically converts WordPress images to WebP using picture elements. Works with WP Offload Media and KeyCDN for on-the-fly conversion.
 
 ---
 
@@ -140,6 +140,16 @@ Check the settings page status cards, enable debug comments temporarily, inspect
 
 ## Changelog
 
+### 1.0.3
+
+- Security: Fixed all output escaping issues to prevent XSS vulnerabilities.
+- Security: Replaced all `_e()` calls with `esc_html_e()` for proper escaping.
+- Security: Escaped all URLs, variables, and translated strings.
+- Code quality: Removed discouraged `load_plugin_textdomain()` function (WordPress handles translations automatically since 4.6).
+- Code quality: Removed invalid `Network` header from plugin file.
+- Documentation: Created proper `readme.txt` file for WordPress.org compatibility.
+- Documentation: Fixed short description length to meet WordPress.org requirements.
+
 ### 1.0.2
 
 - Enhancement: Derive CDN resize parameters from the attachment variant so thumbnails request correctly sized assets.
@@ -157,7 +167,8 @@ Check the settings page status cards, enable debug comments temporarily, inspect
 
 ## Upgrade Notice
 
-- **1.0.2** – Honors WordPress size variants (including custom crops) so smaller images don’t fall back to the full-size asset.
+- **1.0.3** – Security and code quality improvements. All output is now properly escaped, and the plugin follows WordPress.org coding standards.
+- **1.0.2** – Honors WordPress size variants (including custom crops) so smaller images don't fall back to the full-size asset.
 - **1.0.1** – Copies `sizes`/`data-sizes` into `<source>` elements to maintain responsive rendering.
 - **1.0.0** – Initial release.
 
