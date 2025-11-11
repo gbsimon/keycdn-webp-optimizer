@@ -2,7 +2,7 @@
 /**
  * Plugin Name: KeyCDN WebP Image Optimization
  * Description: Automatically converts WordPress images to WebP format using picture elements. Works with WP Offload Media and KeyCDN for on-the-fly WebP conversion.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: tom & tom
  * Author URI: https://tomtom.design
  * License: GPL v2 or later
@@ -10,7 +10,7 @@
  * Text Domain: keycdn-webp-optimizer
  * Domain Path: /languages
  * Requires at least: 5.0
- * Tested up to: 6.4
+ * Tested up to: 6.8
  * Requires PHP: 7.4
  * Network: false
  */
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('KEYCDN_WEBP_VERSION', '1.0.1');
+define('KEYCDN_WEBP_VERSION', '1.0.2');
 define('KEYCDN_WEBP_PLUGIN_FILE', __FILE__);
 define('KEYCDN_WEBP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('KEYCDN_WEBP_PLUGIN_URL', plugin_dir_url(__FILE__));
