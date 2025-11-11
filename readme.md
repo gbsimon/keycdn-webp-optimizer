@@ -25,7 +25,6 @@ Automatically converts WordPress images to WebP using `<picture>` elements, inte
 - [Installation](#installation)
 - [Prerequisites](#prerequisites)
 - [FAQ](#faq)
-- [Screenshots](#screenshots)
 - [Changelog](#changelog)
 - [Upgrade Notice](#upgrade-notice)
 - [Technical Details](#technical-details)
@@ -136,14 +135,6 @@ Basic Mode rewrites simple `<img>` tags. Enhanced Mode also carries over `srcset
 
 **How do I confirm it’s working?**  
 Check the settings page status cards, enable debug comments temporarily, inspect markup via DevTools, and monitor CDN logs for `?format=webp` requests.
-
----
-
-## Screenshots
-
-1. Admin settings view with prerequisites checklist.
-2. Configuration panel with real-time status indicators.
-3. Debug mode output showing inline HTML comments.
 
 ---
 
