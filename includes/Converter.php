@@ -1,75 +1,92 @@
 <?php
 /**
- * WebP Converter Class
+ * WebP Converter
  * 
  * Handles the conversion of img tags to picture elements with WebP support
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+/**
+ * Initialize converter hooks
+ */
+function tomtom_image_optim_init_converter() {
+	// Only enable if WebP is enabled and we're on frontend
+	if ( get_option( 'keycdn_webp_enabled', true ) && ! is_admin() ) {
+		add_action( 'template_redirect', 'tomtom_image_optim_enable_webp_picture_elements', 1 );
+		add_action( 'shutdown', 'tomtom_image_optim_flush_output_buffer', 999 );
+	}
+}
+add_action( 'init', 'tomtom_image_optim_init_converter' );
+
+/**
+ * Track the buffer level when we start buffering
+ */
+function tomtom_image_optim_get_initial_buffer_level() {
+	static $initial_level = null;
+	return $initial_level;
 }
 
-class KeyCDN_WebP_Converter {
+/**
+ * Set the initial buffer level
+ */
+function tomtom_image_optim_set_initial_buffer_level( $level ) {
+	static $initial_level = null;
+	$initial_level = $level;
+}
+
+/**
+ * Enable WebP picture elements via output buffering
+ */
+function tomtom_image_optim_enable_webp_picture_elements() {
+	// Store the buffer level before we start our buffer
+	$initial_level = ob_get_level();
+	tomtom_image_optim_set_initial_buffer_level( $initial_level );
+	
+	// Start output buffering with our callback
+	ob_start( 'tomtom_image_optim_process_html' );
+}
+
+/**
+ * Flush output buffer on shutdown to ensure proper cleanup
+ */
+function tomtom_image_optim_flush_output_buffer() {
+	$initial_level = tomtom_image_optim_get_initial_buffer_level();
+	$current_level = ob_get_level();
+	
+	// Only flush if we started a buffer and the current level indicates our buffer is still active
+	// Our buffer should be at initial_level + 1 (we added one buffer)
+	if ( $initial_level !== null && $current_level === $initial_level + 1 ) {
+		// Our buffer is the topmost one and exactly one level above where we started
+		// This means it's definitely our buffer - safe to flush
+		if ( ob_get_level() > 0 ) {
+			ob_end_flush();
+		}
+	}
+	// If current_level > initial_level + 1, other buffers were started after ours
+	// In that case, WordPress will handle flushing all buffers at shutdown,
+	// but we've ensured our buffer is properly tracked and will be processed
+}
+
+/**
+ * Process HTML content
+ */
+function tomtom_image_optim_process_html( $html ) {
+	// Use enhanced version if enabled
+	if ( get_option( 'keycdn_webp_enhanced', true ) ) {
+		return tomtom_image_optim_convert_images_to_webp_picture_enhanced( $html );
+	} else {
+		return tomtom_image_optim_convert_images_to_webp_picture( $html );
+	}
+}
     
-    /**
-     * Single instance of the class
-     */
-    private static $instance = null;
-    
-    /**
-     * Get single instance
-     */
-    public static function get_instance() {
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-    
-    /**
-     * Constructor
-     */
-    private function __construct() {
-        $this->init_hooks();
-    }
-    
-    /**
-     * Initialize hooks
-     */
-    private function init_hooks() {
-        // Only enable if WebP is enabled and we're on frontend
-        if (get_option('keycdn_webp_enabled', true) && !is_admin()) {
-            add_action('template_redirect', array($this, 'enable_webp_picture_elements'));
-        }
-        
-    }
-    
-    /**
-     * Enable WebP picture elements via output buffering
-     */
-    public function enable_webp_picture_elements() {
-        ob_start(array($this, 'process_html'));
-    }
-    
-    /**
-     * Process HTML content
-     */
-    public function process_html($html) {
-        // Use enhanced version if enabled
-        if (get_option('keycdn_webp_enhanced', true)) {
-            return $this->convert_images_to_webp_picture_enhanced($html);
-        } else {
-            return $this->convert_images_to_webp_picture($html);
-        }
-    }
-    
-    /**
-     * Convert img tags to picture elements with WebP support
-     * Only targets images from WordPress/ACF functions
-     * @param string $html HTML content
-     * @return string Modified HTML with picture elements
-     */
-    public function convert_images_to_webp_picture($html) {
+/**
+ * Convert img tags to picture elements with WebP support
+ * Only targets images from WordPress/ACF functions
+ * @param string $html HTML content
+ * @return string Modified HTML with picture elements
+ */
+function tomtom_image_optim_convert_images_to_webp_picture( $html ) {
         // First, remove any existing picture elements from processing
         $picture_pattern = '/<picture[^>]*>.*?<\/picture>/is';
         $picture_matches = array();
@@ -149,60 +166,60 @@ class KeyCDN_WebP_Converter {
                 return $matches[0];
             }
             
-            $quality        = get_option('keycdn_webp_quality', 80);
-            $all_attributes = $img_attributes . $remaining_attributes;
-            $attachment_id  = $this->extract_attachment_id_from_attributes($all_attributes);
-            $size_slug      = $this->extract_size_slug_from_attributes($all_attributes);
-            $metadata       = $attachment_id ? wp_get_attachment_metadata($attachment_id) : null;
-            $dimensions     = $this->merge_dimensions(
-                $this->extract_dimensions_from_attributes($all_attributes),
-                $this->get_dimensions_from_metadata($attachment_id, $size_slug, $metadata)
-            );
+			$quality        = get_option( 'keycdn_webp_quality', 80 );
+			$all_attributes = $img_attributes . $remaining_attributes;
+			$attachment_id  = tomtom_image_optim_extract_attachment_id_from_attributes( $all_attributes );
+			$size_slug      = tomtom_image_optim_extract_size_slug_from_attributes( $all_attributes );
+			$metadata       = $attachment_id ? wp_get_attachment_metadata( $attachment_id ) : null;
+			$dimensions     = tomtom_image_optim_merge_dimensions(
+				tomtom_image_optim_extract_dimensions_from_attributes( $all_attributes ),
+				tomtom_image_optim_get_dimensions_from_metadata( $attachment_id, $size_slug, $metadata )
+			);
 
-            $variant_details = $this->resolve_variant_details($attachment_id, $size_slug, $dimensions, $original_src, $metadata);
-            $size_slug       = $variant_details['size_slug'];
-            $dimensions      = $variant_details['dimensions'];
-            $is_full_size    = in_array($size_slug, array('full', 'original'), true);
-            $target_width    = !empty($dimensions['width']) ? (int) $dimensions['width'] : null;
+			$variant_details = tomtom_image_optim_resolve_variant_details( $attachment_id, $size_slug, $dimensions, $original_src, $metadata );
+			$size_slug       = $variant_details['size_slug'];
+			$dimensions      = $variant_details['dimensions'];
+			$is_full_size    = in_array( $size_slug, array( 'full', 'original' ), true );
+			$target_width    = ! empty( $dimensions['width'] ) ? (int) $dimensions['width'] : null;
 
-            $webp_params = array(
-                'format'  => 'webp',
-                'quality' => $quality,
-            );
+			$webp_params = array(
+				'format'  => 'webp',
+				'quality' => $quality,
+			);
 
-            if (!$is_full_size && $target_width) {
-                $webp_params['width'] = $target_width;
-            }
+			if ( ! $is_full_size && $target_width ) {
+				$webp_params['width'] = $target_width;
+			}
 
-            $webp_src = $this->build_cdn_url_with_params($original_src, $webp_params);
+			$webp_src = tomtom_image_optim_build_cdn_url_with_params( $original_src, $webp_params );
 
-            $fallback_params = array();
-            if (!$is_full_size && $target_width) {
-                $fallback_params['width'] = $target_width;
-            }
+			$fallback_params = array();
+			if ( ! $is_full_size && $target_width ) {
+				$fallback_params['width'] = $target_width;
+			}
 
-            $fallback_src = $this->build_cdn_url_with_params($original_src, $fallback_params);
-            
-            // Extract sizes-related attributes from original <img>
-            $sizes_attr = '';
-            $all_attrs_for_sizes = $img_attributes . $remaining_attributes;
-            if (preg_match('/\s(data-lazy-sizes|data-sizes|sizes)=("|\')([^"\']*)(\2)/i', $all_attrs_for_sizes, $m)) {
-                // m[1] is the attribute name, m[3] is the value
-                $sizes_attr = ' ' . $m[1] . '="' . esc_attr($m[3]) . '"';
-            }
+			$fallback_src = tomtom_image_optim_build_cdn_url_with_params( $original_src, $fallback_params );
+			
+			// Extract sizes-related attributes from original <img>
+			$sizes_attr = '';
+			$all_attrs_for_sizes = $img_attributes . $remaining_attributes;
+			if ( preg_match( '/\s(data-lazy-sizes|data-sizes|sizes)=("|\')([^"\']*)(\2)/i', $all_attrs_for_sizes, $m ) ) {
+				// m[1] is the attribute name, m[3] is the value
+				$sizes_attr = ' ' . $m[1] . '="' . esc_attr( $m[3] ) . '"';
+			}
 
-            // Build picture element
-            $picture = '<picture>';
-            $picture .= '<source srcset="' . esc_attr($webp_src) . '" type="image/webp"' . $sizes_attr . '>';
-            $picture .= '<img' . $img_attributes . 'src="' . esc_attr($fallback_src) . '"' . $remaining_attributes . '>';
-            $picture .= '</picture>';
-            
-            // Add debug info if enabled
-            if (get_option('keycdn_webp_debug', false)) {
-                $picture = '<!-- WebP Conversion: ' . $original_src . ' -> ' . $webp_src . ' -->' . $picture;
-            }
-            
-            return $picture;
+			// Build picture element
+			$picture = '<picture>';
+			$picture .= '<source srcset="' . esc_attr( $webp_src ) . '" type="image/webp"' . $sizes_attr . '>';
+			$picture .= '<img' . $img_attributes . 'src="' . esc_attr( $fallback_src ) . '"' . $remaining_attributes . '>';
+			$picture .= '</picture>';
+			
+			// Add debug info if enabled
+			if ( get_option( 'keycdn_webp_debug', false ) ) {
+				$picture = '<!-- WebP Conversion: ' . $original_src . ' -> ' . $webp_src . ' -->' . $picture;
+			}
+			
+			return $picture;
         }, $html);
         
         // Restore the original picture elements
@@ -210,14 +227,14 @@ class KeyCDN_WebP_Converter {
             $html = str_replace('<!--PICTURE_PLACEHOLDER_' . $index . '-->', $picture_html, $html);
         }
         
-        return $html;
-    }
-    
-    /**
-     * Enhanced version that handles srcset attributes
-     * Only targets images from WordPress/ACF functions
-     */
-    public function convert_images_to_webp_picture_enhanced($html) {
+	return $html;
+}
+
+/**
+ * Enhanced version that handles srcset attributes
+ * Only targets images from WordPress/ACF functions
+ */
+function tomtom_image_optim_convert_images_to_webp_picture_enhanced( $html ) {
         // First, remove any existing picture elements from processing
         $picture_pattern = '/<picture[^>]*>.*?<\/picture>/is';
         $picture_matches = array();
@@ -304,16 +321,16 @@ class KeyCDN_WebP_Converter {
                 $srcset_match = $srcset_matches[3];
             }
 
-            $quality       = get_option('keycdn_webp_quality', 80);
-            $attachment_id = $this->extract_attachment_id_from_attributes($all_attributes);
-            $size_slug     = $this->extract_size_slug_from_attributes($all_attributes);
-            $metadata      = $attachment_id ? wp_get_attachment_metadata($attachment_id) : null;
-            $dimensions    = $this->merge_dimensions(
-                $this->extract_dimensions_from_attributes($all_attributes),
-                $this->get_dimensions_from_metadata($attachment_id, $size_slug, $metadata)
-            );
+			$quality       = get_option( 'keycdn_webp_quality', 80 );
+			$attachment_id = tomtom_image_optim_extract_attachment_id_from_attributes( $all_attributes );
+			$size_slug     = tomtom_image_optim_extract_size_slug_from_attributes( $all_attributes );
+			$metadata      = $attachment_id ? wp_get_attachment_metadata( $attachment_id ) : null;
+			$dimensions    = tomtom_image_optim_merge_dimensions(
+				tomtom_image_optim_extract_dimensions_from_attributes( $all_attributes ),
+				tomtom_image_optim_get_dimensions_from_metadata( $attachment_id, $size_slug, $metadata )
+			);
 
-            $variant_details = $this->resolve_variant_details($attachment_id, $size_slug, $dimensions, $original_src, $metadata);
+			$variant_details = tomtom_image_optim_resolve_variant_details( $attachment_id, $size_slug, $dimensions, $original_src, $metadata );
             $size_slug       = $variant_details['size_slug'];
             $dimensions      = $variant_details['dimensions'];
 
@@ -329,17 +346,17 @@ class KeyCDN_WebP_Converter {
                 $webp_params['width'] = $base_width;
             }
 
-            $webp_src = $this->build_cdn_url_with_params($original_src, $webp_params);
+			$webp_src = tomtom_image_optim_build_cdn_url_with_params( $original_src, $webp_params );
 
-            $fallback_params = array();
-            if ($base_width) {
-                $fallback_params['width'] = $base_width;
-            }
-            $fallback_src = $this->build_cdn_url_with_params($original_src, $fallback_params);
+			$fallback_params = array();
+			if ( $base_width ) {
+				$fallback_params['width'] = $base_width;
+			}
+			$fallback_src = tomtom_image_optim_build_cdn_url_with_params( $original_src, $fallback_params );
 
-            if (!empty($srcset_match)) {
-                $webp_srcset     = $this->build_srcset_with_params($srcset_match, $webp_params, $base_width);
-                $fallback_srcset = $this->build_srcset_with_params($srcset_match, $fallback_params, $base_width);
+			if ( ! empty( $srcset_match ) ) {
+				$webp_srcset     = tomtom_image_optim_build_srcset_with_params( $srcset_match, $webp_params, $base_width );
+				$fallback_srcset = tomtom_image_optim_build_srcset_with_params( $srcset_match, $fallback_params, $base_width );
 
                 if (!empty($fallback_srcset)) {
                     $new_srcset_attr = ' srcset="' . esc_attr($fallback_srcset) . '"';
@@ -401,18 +418,18 @@ class KeyCDN_WebP_Converter {
             $html = str_replace('<!--PICTURE_PLACEHOLDER_' . $index . '-->', $picture_html, $html);
         }
         
-        return $html;
-    }
-    
-    /**
-     * Build a CDN URL with the supplied query parameters, overriding any existing values for the same keys.
-     *
-     * @param string $url    Base URL.
-     * @param array  $params Query parameters to append.
-     *
-     * @return string
-     */
-    private function build_cdn_url_with_params($url, array $params = array()) {
+	return $html;
+}
+
+/**
+ * Build a CDN URL with the supplied query parameters, overriding any existing values for the same keys.
+ *
+ * @param string $url    Base URL.
+ * @param array  $params Query parameters to append.
+ *
+ * @return string
+ */
+function tomtom_image_optim_build_cdn_url_with_params( $url, array $params = array() ) {
         if (empty($params)) {
             return $url;
         }
@@ -431,47 +448,47 @@ class KeyCDN_WebP_Converter {
 
         $url = remove_query_arg(array_keys($filtered_params), $url);
 
-        return add_query_arg($filtered_params, $url);
-    }
+	return add_query_arg( $filtered_params, $url );
+}
 
-    /**
-     * Extract attachment ID from image attributes.
-     *
-     * @param string $attributes Attribute string from img tag.
-     *
-     * @return int|null
-     */
-    private function extract_attachment_id_from_attributes($attributes) {
+/**
+ * Extract attachment ID from image attributes.
+ *
+ * @param string $attributes Attribute string from img tag.
+ *
+ * @return int|null
+ */
+function tomtom_image_optim_extract_attachment_id_from_attributes( $attributes ) {
         if (preg_match('/wp-image-(\d+)/', $attributes, $match)) {
             return (int) $match[1];
         }
 
-        return null;
-    }
+	return null;
+}
 
-    /**
-     * Extract size slug from image attributes.
-     *
-     * @param string $attributes Attribute string from img tag.
-     *
-     * @return string|null
-     */
-    private function extract_size_slug_from_attributes($attributes) {
+/**
+ * Extract size slug from image attributes.
+ *
+ * @param string $attributes Attribute string from img tag.
+ *
+ * @return string|null
+ */
+function tomtom_image_optim_extract_size_slug_from_attributes( $attributes ) {
         if (preg_match('/size-([a-z0-9\-_]+)/', $attributes, $match)) {
             return strtolower($match[1]);
         }
 
-        return null;
-    }
+	return null;
+}
 
-    /**
-     * Extract width and height attributes from markup.
-     *
-     * @param string $attributes Attribute string from img tag.
-     *
-     * @return array{width:int|null,height:int|null}
-     */
-    private function extract_dimensions_from_attributes($attributes) {
+/**
+ * Extract width and height attributes from markup.
+ *
+ * @param string $attributes Attribute string from img tag.
+ *
+ * @return array{width:int|null,height:int|null}
+ */
+function tomtom_image_optim_extract_dimensions_from_attributes( $attributes ) {
         $dimensions = array(
             'width'  => null,
             'height' => null,
@@ -485,36 +502,36 @@ class KeyCDN_WebP_Converter {
             $dimensions['height'] = (int) $match[1];
         }
 
-        return $dimensions;
-    }
+	return $dimensions;
+}
 
-    /**
-     * Merge two dimension arrays giving precedence to precise metadata values.
-     *
-     * @param array $primary   Dimensions extracted from markup.
-     * @param array $secondary Dimensions extracted from metadata.
-     *
-     * @return array
-     */
-    private function merge_dimensions(array $primary, array $secondary) {
+/**
+ * Merge two dimension arrays giving precedence to precise metadata values.
+ *
+ * @param array $primary   Dimensions extracted from markup.
+ * @param array $secondary Dimensions extracted from metadata.
+ *
+ * @return array
+ */
+function tomtom_image_optim_merge_dimensions( array $primary, array $secondary ) {
         foreach (array('width', 'height') as $key) {
             if (empty($primary[$key]) && !empty($secondary[$key])) {
                 $primary[$key] = (int) $secondary[$key];
             }
         }
 
-        return $primary;
-    }
+	return $primary;
+}
 
-    /**
-     * Retrieve dimensions for a specific size from attachment metadata.
-     *
-     * @param int|null    $attachment_id Attachment ID.
-     * @param string|null $size_slug     Size slug.
-     *
-     * @return array{width:int|null,height:int|null}
-     */
-    private function get_dimensions_from_metadata($attachment_id, $size_slug, $metadata = null) {
+/**
+ * Retrieve dimensions for a specific size from attachment metadata.
+ *
+ * @param int|null    $attachment_id Attachment ID.
+ * @param string|null $size_slug     Size slug.
+ *
+ * @return array{width:int|null,height:int|null}
+ */
+function tomtom_image_optim_get_dimensions_from_metadata( $attachment_id, $size_slug, $metadata = null ) {
         $dimensions = array(
             'width'  => null,
             'height' => null,
@@ -551,19 +568,19 @@ class KeyCDN_WebP_Converter {
             $dimensions['height'] = (int) $metadata['height'];
         }
 
-        return $dimensions;
-    }
+	return $dimensions;
+}
 
-    /**
-     * Build an updated srcset string with resizing parameters applied to each entry.
-     *
-     * @param string   $srcset     Original srcset string.
-     * @param array    $base_params Base parameters to apply to every URL.
-     * @param int|null $base_width  Base width for calculating density descriptors.
-     *
-     * @return string
-     */
-    private function build_srcset_with_params($srcset, array $base_params, $base_width = null) {
+/**
+ * Build an updated srcset string with resizing parameters applied to each entry.
+ *
+ * @param string   $srcset     Original srcset string.
+ * @param array    $base_params Base parameters to apply to every URL.
+ * @param int|null $base_width  Base width for calculating density descriptors.
+ *
+ * @return string
+ */
+function tomtom_image_optim_build_srcset_with_params( $srcset, array $base_params, $base_width = null ) {
         if (empty($srcset)) {
             return '';
         }
@@ -584,35 +601,35 @@ class KeyCDN_WebP_Converter {
 
             $params = $base_params;
 
-            $descriptor_width = $this->extract_width_from_descriptor($descriptor, $base_width);
-            if ($descriptor_width) {
-                $params['width'] = $descriptor_width;
-            } else {
-                unset($params['width']);
-            }
+			$descriptor_width = tomtom_image_optim_extract_width_from_descriptor( $descriptor, $base_width );
+			if ( $descriptor_width ) {
+				$params['width'] = $descriptor_width;
+			} else {
+				unset( $params['width'] );
+			}
 
-            $entries[] = trim($this->build_cdn_url_with_params($url, $params) . ( $descriptor ? ' ' . $descriptor : '' ));
+			$entries[] = trim( tomtom_image_optim_build_cdn_url_with_params( $url, $params ) . ( $descriptor ? ' ' . $descriptor : '' ) );
         }
 
-        return implode(', ', $entries);
-    }
+	return implode( ', ', $entries );
+}
 
-    /**
-     * Refine size information using attachment metadata and the requested source.
-     *
-     * @param int|null  $attachment_id Attachment ID.
-     * @param string|null $size_slug   Initial size slug guess.
-     * @param array     $dimensions    Current dimensions.
-     * @param string    $src           Image source URL.
-     * @param array|null $metadata     Optional attachment metadata.
-     *
-     * @return array{size_slug:?string,dimensions:array}
-     */
-    private function resolve_variant_details($attachment_id, $size_slug, array $dimensions, $src, $metadata = null) {
+/**
+ * Refine size information using attachment metadata and the requested source.
+ *
+ * @param int|null  $attachment_id Attachment ID.
+ * @param string|null $size_slug   Initial size slug guess.
+ * @param array     $dimensions    Current dimensions.
+ * @param string    $src           Image source URL.
+ * @param array|null $metadata     Optional attachment metadata.
+ *
+ * @return array{size_slug:?string,dimensions:array}
+ */
+function tomtom_image_optim_resolve_variant_details( $attachment_id, $size_slug, array $dimensions, $src, $metadata = null ) {
         $resolved_slug   = $size_slug;
         $resource_width  = null;
         $resource_height = null;
-        $basename        = $this->get_basename_from_url($src);
+	$basename        = tomtom_image_optim_get_basename_from_url( $src );
 
         if ($attachment_id) {
             if (null === $metadata) {
@@ -651,8 +668,8 @@ class KeyCDN_WebP_Converter {
             }
         }
 
-        if (null === $resource_width || null === $resource_height) {
-            $filename_dimensions = $this->extract_dimensions_from_filename($basename);
+	if ( null === $resource_width || null === $resource_height ) {
+		$filename_dimensions = tomtom_image_optim_extract_dimensions_from_filename( $basename );
 
             if (null === $resource_width && !empty($filename_dimensions['width'])) {
                 $resource_width = (int) $filename_dimensions['width'];
@@ -675,20 +692,20 @@ class KeyCDN_WebP_Converter {
             $dimensions['height'] = $resource_height;
         }
 
-        return array(
-            'size_slug'  => $resolved_slug,
-            'dimensions' => $dimensions,
-        );
-    }
+	return array(
+		'size_slug'  => $resolved_slug,
+		'dimensions' => $dimensions,
+	);
+}
 
-    /**
-     * Extract dimensions from a filename suffix (e.g. file-300x200.jpg).
-     *
-     * @param string $filename Filename to inspect.
-     *
-     * @return array{width:int|null,height:int|null}
-     */
-    private function extract_dimensions_from_filename($filename) {
+/**
+ * Extract dimensions from a filename suffix (e.g. file-300x200.jpg).
+ *
+ * @param string $filename Filename to inspect.
+ *
+ * @return array{width:int|null,height:int|null}
+ */
+function tomtom_image_optim_extract_dimensions_from_filename( $filename ) {
         $dimensions = array(
             'width'  => null,
             'height' => null,
@@ -703,17 +720,17 @@ class KeyCDN_WebP_Converter {
             $dimensions['height'] = (int) $match[2];
         }
 
-        return $dimensions;
-    }
+	return $dimensions;
+}
 
-    /**
-     * Get basename from a URL without its query component.
-     *
-     * @param string $url URL to parse.
-     *
-     * @return string|null
-     */
-    private function get_basename_from_url($url) {
+/**
+ * Get basename from a URL without its query component.
+ *
+ * @param string $url URL to parse.
+ *
+ * @return string|null
+ */
+function tomtom_image_optim_get_basename_from_url( $url ) {
         if (empty($url)) {
             return null;
         }
@@ -723,18 +740,18 @@ class KeyCDN_WebP_Converter {
             $url = substr($url, 0, $query_position);
         }
 
-        return wp_basename($url);
-    }
+	return wp_basename( $url );
+}
 
-    /**
-     * Extract a width from a srcset descriptor.
-     *
-     * @param string   $descriptor Descriptor string (e.g. "300w" or "2x").
-     * @param int|null $base_width Base width for density descriptors.
-     *
-     * @return int|null
-     */
-    private function extract_width_from_descriptor($descriptor, $base_width = null) {
+/**
+ * Extract a width from a srcset descriptor.
+ *
+ * @param string   $descriptor Descriptor string (e.g. "300w" or "2x").
+ * @param int|null $base_width Base width for density descriptors.
+ *
+ * @return int|null
+ */
+function tomtom_image_optim_extract_width_from_descriptor( $descriptor, $base_width = null ) {
         if (preg_match('/(\d+)w/', $descriptor, $match)) {
             return (int) $match[1];
         }
@@ -743,25 +760,23 @@ class KeyCDN_WebP_Converter {
             return (int) round($base_width * (float) $match[1]);
         }
 
-        return null;
-    }
+	return null;
+}
 
-    /**
-     * Get WebP conversion statistics
-     * @return array Conversion stats
-     */
-    public function get_webp_conversion_stats() {
-        static $stats = null;
-        
-        if ($stats === null) {
-            $stats = array(
-                'conversions' => 0,
-                'webp_enabled' => get_option('keycdn_webp_enabled', true),
-                'enhanced_mode' => get_option('keycdn_webp_enhanced', true)
-            );
-        }
-        
-        return $stats;
-    }
-    
+/**
+ * Get WebP conversion statistics
+ * @return array Conversion stats
+ */
+function tomtom_image_optim_get_webp_conversion_stats() {
+	static $stats = null;
+	
+	if ( $stats === null ) {
+		$stats = array(
+			'conversions' => 0,
+			'webp_enabled' => get_option( 'keycdn_webp_enabled', true ),
+			'enhanced_mode' => get_option( 'keycdn_webp_enhanced', true )
+		);
+	}
+	
+	return $stats;
 }

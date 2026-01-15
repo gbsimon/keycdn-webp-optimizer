@@ -1,14 +1,14 @@
-# KeyCDN WebP Image Optimization
+# tom & tom Image Optimization for CDN
 
 > Modern WebP delivery for WordPress media libraries offloaded via WP Offload Media + KeyCDN.
 
 | Meta             | Value                                                                 |
 | ---------------- | --------------------------------------------------------------------- |
-| **Contributors** | `gb_simon`                                                            |
+| **Contributors** | `tomtomdesign`                                                        |
 | **Tags**         | webp, optimization, keycdn, cdn, images                               |
 | **Requires**     | WordPress 5.0+ · PHP 7.4+                                             |
 | **Tested up to** | WordPress 6.8                                                         |
-| **Stable tag**   | 1.0.3                                                                 |
+| **Stable tag**   | 1.0.4                                                                 |
 | **License**      | GPLv2 or later ([license](https://www.gnu.org/licenses/gpl-2.0.html)) |
 
 Automatically converts WordPress images to WebP using picture elements. Works with WP Offload Media and KeyCDN for on-the-fly conversion.
@@ -46,8 +46,8 @@ Automatically converts WordPress images to WebP using picture elements. Works wi
 
 - [ ] Configure **WP Offload Media** to push uploads to S3-compatible storage (DigitalOcean Spaces, Amazon S3, etc.).
 - [ ] Point **KeyCDN (or another compatible CDN)** at the bucket and enable format conversion via `?format=webp`.
-- [ ] Install & activate **KeyCDN WebP Image Optimization**.
-- [ ] Visit **Settings → KeyCDN WebP** to toggle features such as Enhanced Mode and Debug Mode.
+- [ ] Install & activate **tom & tom Image Optimization for CDN**.
+- [ ] Visit **Settings → tom & tom Image Optimization** to toggle features such as Enhanced Mode and Debug Mode.
 
 > [!TIP]
 > Keep a browser console open with DevTools when first testing—it's the quickest way to verify the in-page `<picture>` markup and CDN responses.
@@ -92,12 +92,12 @@ Automatically converts WordPress images to WebP using picture elements. Works wi
 
 ## Installation
 
-1. Upload the plugin to `/wp-content/plugins/keycdn-webp-optimizer/` or install via WP-CLI:
+1. Upload the plugin to `/wp-content/plugins/tomtomdesign-image-optim-for-cdn/` or install via WP-CLI:
    ```
-   wp plugin install keycdn-webp-optimizer --activate
+   wp plugin install tomtomdesign-image-optim-for-cdn --activate
    ```
 2. Activate through the **Plugins** screen.
-3. Configure settings under **Settings → KeyCDN WebP**.
+3. Configure settings under **Settings → tom & tom Image Optimization**.
 4. Confirm WP Offload Media is offloading uploads successfully.
 5. Verify your CDN honors both `?format=webp` and resize (`?width=`) query parameters.
 
@@ -161,7 +161,7 @@ Check the settings page status cards, enable debug comments temporarily, inspect
 
 ### 1.0.0
 
-- Initial release of KeyCDN WebP Image Optimization with automatic `<img>` to `<picture>` conversion, WP Offload Media integration, KeyCDN support, admin settings, smart detection, enhanced mode, and debug tooling.
+- Initial release of tom & tom Image Optimization for CDN with automatic `<img>` to `<picture>` conversion, WP Offload Media integration, CDN support, admin settings, smart detection, enhanced mode, and debug tooling.
 
 ---
 

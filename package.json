@@ -1,0 +1,28 @@
+{
+	"name": "tomtomdesign-image-optim-for-cdn",
+	"version": "1.0.4",
+	"description": "WordPress plugin for CDN image optimization with WebP support",
+	"main": "keycdn-webp-optimizer.php",
+	"scripts": {
+		"dev": "sass --watch src/scss:assets/css",
+		"build": "sass src/scss:assets/css --style=compressed && cp -r src/js/* assets/js/",
+		"deploy": "npm run build && npm run package",
+		"package": "rm -f tomtomdesign-image-optim-for-cdn.zip && zip -r tomtomdesign-image-optim-for-cdn.zip . -x \"node_modules/*\" \".git/*\" \"*.map\" \"tomtomdesign-image-optim-for-cdn.zip\" \"src/*\" \".DS_Store\" \".gitignore\" \"package.json\"  \"package-lock.json\" \"build.sh\""
+	},
+	"keywords": [
+		"wordpress",
+		"plugin",
+		"webp",
+		"image-optimization",
+		"cdn"
+	],
+	"author": "tom & tom",
+	"license": "GPL-2.0-or-later",
+	"devDependencies": {
+		"sass": "^1.94.0"
+	},
+	"engines": {
+		"node": ">=14.0.0",
+		"npm": ">=6.0.0"
+	}
+}
